@@ -9,22 +9,20 @@ deps:
 
 # Download all pretrained models
 download-all:
-    @echo "Downloading all pretrained models..."
-    python scripts/export.py --download-all
-    @echo "✓ All models downloaded"
+    python scripts/download.py all
 
-# Download specific model (currently downloads all - individual downloads not yet implemented)
-download-mobile-det: download-all
-    @echo "✓ Mobile detection model available"
+# Download specific model
+download-mobile-det:
+    python scripts/download.py PP-OCRv5_mobile_det
 
-download-mobile-rec: download-all
-    @echo "✓ Mobile recognition model available"
+download-mobile-rec:
+    python scripts/download.py PP-OCRv5_mobile_rec
 
-download-server-det: download-all
-    @echo "✓ Server detection model available"
+download-server-det:
+    python scripts/download.py PP-OCRv5_server_det
 
-download-server-rec: download-all
-    @echo "✓ Server recognition model available"
+download-server-rec:
+    python scripts/download.py PP-OCRv5_server_rec
 
 # Setup PaddleOCR repository (one-time setup)
 setup: deps download-all

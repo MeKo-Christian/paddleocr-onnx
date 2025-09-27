@@ -10,9 +10,6 @@ on:
   push:
     tags:
       - 'v*'
-  schedule:
-    # Run monthly to refresh models
-    - cron: '0 0 1 * *'
 
 jobs:
   export-models:
