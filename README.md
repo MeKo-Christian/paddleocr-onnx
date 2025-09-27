@@ -1,6 +1,6 @@
 # PP-OCRv5 ONNX Export Pipeline
 
-Streamlined pipeline for exporting PP-OCRv5 models to ONNX format using the official PaddleOCR method. Perfect for CI/CD workflows and automated releases.
+Streamlined pipeline for exporting PP-OCRv5 models to ONNX format. Contains a GH action workflow and automated releases.
 
 ## 🚀 Quick Start
 
@@ -97,19 +97,14 @@ rec_result = rec_session.run(None, {"x": cropped_text})
 
 ## File Structure
 
-```
-├── onnx_models/                    # Exported ONNX models
-│   ├── PP-OCRv5_server_det.onnx
-│   ├── PP-OCRv5_server_rec.onnx
-│   ├── PP-OCRv5_mobile_det.onnx
-│   └── PP-OCRv5_mobile_rec.onnx
+```plain
 ├── scripts/
-│   └── export_official_fixed.py   # Fixed export script
+│   └── export.py             # Fixed export script
 ├── .github/workflows/
-│   └── export-models.yml          # GitHub Action
-├── justfile                        # Command definitions
-├── requirements.txt               # Python dependencies
-└── README.md                      # This file
+│   └── export-models.yml     # GitHub Action
+├── justfile                  # Command definitions
+├── requirements.txt          # Python dependencies
+└── README.md                 # This file
 ```
 
 ## Requirements
@@ -136,4 +131,3 @@ This project follows the same license as the original PaddleOCR project.
 
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) - Original OCR framework
 - [PaddlePaddle](https://github.com/PaddlePaddle/Paddle) - Deep learning framework
-- [paddle2onnx](https://github.com/PaddlePaddle/Paddle2ONNX) - Model conversion tool
