@@ -40,11 +40,32 @@ jobs:
     - name: Setup PaddleOCR and download models
       run: just setup
 
-    - name: Export all models
-      run: just export-all
+    - name: Export PP-OCRv5 mobile detection model
+      run: just export-mobile-det
 
-    - name: Validate exported models
-      run: just validate
+    - name: Validate PP-OCRv5 mobile detection model
+      run: just validate-mobile-det
+
+    - name: Export PP-OCRv5 mobile recognition model
+      run: just export-mobile-rec
+
+    - name: Validate PP-OCRv5 mobile recognition model
+      run: just validate-mobile-rec
+
+    - name: Export PP-OCRv5 server detection model
+      run: just export-server-det
+
+    - name: Validate PP-OCRv5 server detection model
+      run: just validate-server-det
+
+    - name: Export PP-OCRv5 server recognition model
+      run: just export-server-rec
+
+    - name: Validate PP-OCRv5 server recognition model
+      run: just validate-server-rec
+
+    - name: Show model info
+      run: just info
 
     - name: Create model info
       run: |

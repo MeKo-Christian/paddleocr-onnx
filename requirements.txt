@@ -6,3 +6,15 @@ numpy<2.0
 requests>=2.25.0
 tqdm>=4.60.0
 albumentations>=1.0.0
+scikit-image>=0.19.0
+opencv-python>=4.5.0
+opencv-contrib-python>=4.5.0
+Pillow>=8.0.0
+shapely>=1.7.0
+pyclipper>=1.2.0
+lmdb>=1.0.0
+rapidfuzz>=2.0.0
+cython>=0.29.0
+pyyaml>=5.4.0
+albucore>=0.0.5
+packaging>=20.0

@@ -49,8 +49,45 @@ export-all: export-server-det export-server-rec export-mobile-det export-mobile-
     @echo "Output files:"
     @ls -lh onnx_models/*.onnx
 
-# Validate exported ONNX models
-validate:
+# Validate specific ONNX model
+validate-mobile-det:
+    @echo "Validating PP-OCRv5 mobile detection model..."
+    @if [ -f "onnx_models/PP-OCRv5_mobile_det.onnx" ]; then \
+        python3 -c "import onnx; onnx.checker.check_model(onnx.load('onnx_models/PP-OCRv5_mobile_det.onnx')); print('✅ PP-OCRv5_mobile_det.onnx - Valid')"; \
+    else \
+        echo "❌ PP-OCRv5_mobile_det.onnx not found"; \
+        exit 1; \
+    fi
+
+validate-mobile-rec:
+    @echo "Validating PP-OCRv5 mobile recognition model..."
+    @if [ -f "onnx_models/PP-OCRv5_mobile_rec.onnx" ]; then \
+        python3 -c "import onnx; onnx.checker.check_model(onnx.load('onnx_models/PP-OCRv5_mobile_rec.onnx')); print('✅ PP-OCRv5_mobile_rec.onnx - Valid')"; \
+    else \
+        echo "❌ PP-OCRv5_mobile_rec.onnx not found"; \
+        exit 1; \
+    fi
+
+validate-server-det:
+    @echo "Validating PP-OCRv5 server detection model..."
+    @if [ -f "onnx_models/PP-OCRv5_server_det.onnx" ]; then \
+        python3 -c "import onnx; onnx.checker.check_model(onnx.load('onnx_models/PP-OCRv5_server_det.onnx')); print('✅ PP-OCRv5_server_det.onnx - Valid')"; \
+    else \
+        echo "❌ PP-OCRv5_server_det.onnx not found"; \
+        exit 1; \
+    fi
+
+validate-server-rec:
+    @echo "Validating PP-OCRv5 server recognition model..."
+    @if [ -f "onnx_models/PP-OCRv5_server_rec.onnx" ]; then \
+        python3 -c "import onnx; onnx.checker.check_model(onnx.load('onnx_models/PP-OCRv5_server_rec.onnx')); print('✅ PP-OCRv5_server_rec.onnx - Valid')"; \
+    else \
+        echo "❌ PP-OCRv5_server_rec.onnx not found"; \
+        exit 1; \
+    fi
+
+# Validate all exported ONNX models
+validate-all:
     @echo "Validating ONNX models..."
     @if [ -d "onnx_models" ]; then \
         for model in onnx_models/*.onnx; do \
@@ -101,7 +138,7 @@ clean-all:
     @echo "✓ Full cleanup complete"
 
 # Quick start: setup, export all models, and validate
-quick-start: deps setup export-all validate
+quick-start: deps setup export-all validate-all
     @echo "🎉 Quick start complete! All models exported and validated."
 
 # Default target (show help)
