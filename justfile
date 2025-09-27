@@ -7,10 +7,27 @@ deps:
     pip install -r requirements.txt
     @echo "✓ Dependencies installed"
 
-# Setup PaddleOCR repository (one-time setup)
-setup:
-    @echo "Setting up PaddleOCR repository..."
+# Download all pretrained models
+download-all:
+    @echo "Downloading all pretrained models..."
     python scripts/export.py --download-all
+    @echo "✓ All models downloaded"
+
+# Download specific model (currently downloads all - individual downloads not yet implemented)
+download-mobile-det: download-all
+    @echo "✓ Mobile detection model available"
+
+download-mobile-rec: download-all
+    @echo "✓ Mobile recognition model available"
+
+download-server-det: download-all
+    @echo "✓ Server detection model available"
+
+download-server-rec: download-all
+    @echo "✓ Server recognition model available"
+
+# Setup PaddleOCR repository (one-time setup)
+setup: deps download-all
     @echo "✓ Setup complete"
 
 # Export PP-OCRv5 server detection model

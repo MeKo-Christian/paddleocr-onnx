@@ -37,8 +37,8 @@ jobs:
     - name: Install dependencies
       run: just deps
 
-    - name: Setup PaddleOCR and download models
-      run: just setup
+    - name: Download PP-OCRv5 mobile detection model
+      run: just download-mobile-det
 
     - name: Export PP-OCRv5 mobile detection model
       run: just export-mobile-det
@@ -46,17 +46,26 @@ jobs:
     - name: Validate PP-OCRv5 mobile detection model
       run: just validate-mobile-det
 
+    - name: Download PP-OCRv5 mobile recognition model
+      run: just download-mobile-rec
+
     - name: Export PP-OCRv5 mobile recognition model
       run: just export-mobile-rec
 
     - name: Validate PP-OCRv5 mobile recognition model
       run: just validate-mobile-rec
 
+    - name: Download PP-OCRv5 server detection model
+      run: just download-server-det
+
     - name: Export PP-OCRv5 server detection model
       run: just export-server-det
 
     - name: Validate PP-OCRv5 server detection model
       run: just validate-server-det
+
+    - name: Download PP-OCRv5 server recognition model
+      run: just download-server-rec
 
     - name: Export PP-OCRv5 server recognition model
       run: just export-server-rec
