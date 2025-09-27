@@ -1,0 +1,109 @@
+name: Export PP-OCRv5 Models
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag (leave empty for no release)'
+        required: false
+        type: string
+  push:
+    tags:
+      - 'v*'
+  schedule:
+    # Run monthly to refresh models
+    - cron: '0 0 1 * *'
+
+jobs:
+  export-models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install just
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+        just --version
+
+    - name: Install dependencies
+      run: just deps
+
+    - name: Setup PaddleOCR and download models
+      run: just setup
+
+    - name: Export all models
+      run: just export-all
+
+    - name: Validate exported models
+      run: just validate
+
+    - name: Create model info
+      run: |
+        echo "# PP-OCRv5 ONNX Models" > MODEL_INFO.md
+        echo "" >> MODEL_INFO.md
+        echo "Exported on: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> MODEL_INFO.md
+        echo "Export method: Official PaddleOCR pipeline" >> MODEL_INFO.md
+        echo "" >> MODEL_INFO.md
+        echo "## Models" >> MODEL_INFO.md
+        echo "" >> MODEL_INFO.md
+
+        for model in onnx_models/*.onnx; do
+          name=$(basename "$model" .onnx)
+          size=$(ls -lh "$model" | awk '{print $5}')
+          echo "- **$name.onnx** ($size)" >> MODEL_INFO.md
+        done
+
+        echo "" >> MODEL_INFO.md
+        echo "## Usage" >> MODEL_INFO.md
+        echo "" >> MODEL_INFO.md
+        echo "These models can be used with ONNX Runtime:" >> MODEL_INFO.md
+        echo "" >> MODEL_INFO.md
+        echo '```python' >> MODEL_INFO.md
+        echo 'import onnxruntime as ort' >> MODEL_INFO.md
+        echo 'import numpy as np' >> MODEL_INFO.md
+        echo '' >> MODEL_INFO.md
+        echo '# Load detection model' >> MODEL_INFO.md
+        echo "session = ort.InferenceSession('PP-OCRv5_server_det.onnx')" >> MODEL_INFO.md
+        echo 'result = session.run(None, {"x": input_image})' >> MODEL_INFO.md
+        echo '```' >> MODEL_INFO.md
+
+    - name: Upload models as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ppocrv5-onnx-models
+        path: |
+          onnx_models/*.onnx
+          MODEL_INFO.md
+        retention-days: 30
+
+    - name: Create release (on tag)
+      if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.release_tag != ''
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.event.inputs.release_tag || github.ref_name }}
+        name: PP-OCRv5 ONNX Models ${{ github.event.inputs.release_tag || github.ref_name }}
+        body_path: MODEL_INFO.md
+        files: |
+          onnx_models/PP-OCRv5_server_det.onnx
+          onnx_models/PP-OCRv5_server_rec.onnx
+          onnx_models/PP-OCRv5_mobile_det.onnx
+          onnx_models/PP-OCRv5_mobile_rec.onnx
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Clean up
+      if: always()
+      run: |
+        # Keep ONNX models but clean intermediate files
+        just clean || true

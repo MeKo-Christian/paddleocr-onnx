@@ -1,0 +1,8 @@
+paddlepaddle>=3.0.0
+paddle2onnx>=2.0.0
+onnx>=1.16.0
+onnxruntime>=1.16.0
+numpy<2.0
+requests>=2.25.0
+tqdm>=4.60.0
+albumentations>=1.0.0

@@ -1,0 +1,27 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+venv/
+env/
+
+# PaddleOCR pipeline intermediate files
+onnx_models/
+official_pipeline/
+
+# Exported ONNX models (comment out if you want to track them)
+# onnx_models/
+
+# Temporary files
+*.tmp
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
